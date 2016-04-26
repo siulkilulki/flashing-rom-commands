@@ -1,0 +1,11 @@
+wget https://johnlewis.ie/Chromebook-ROMs/shellballs/swanky/bios.bin.new
+wget https://www.johnlewis.ie/Chromebook-ROMs/utils/cbfstool
+chmod +x ./cbfstool
+./cbfstool bios.bin.new remove -n bootorder
+curl -L -O https://raw.githubusercontent.com/MattDevo/coreboot/master/cbfs/bootorder.hdd
+./cbfstool bios.cbfs.new add -f bootorder.hdd -n bootorder -t raw
+dd bs=1M skip=7 if=bios.bin.new of=bios.cbfs.new
+wget https://johnlewis.ie/Chromebook-ROMs/utils/flashrom
+chmod +x flashrom
+sudo ./flashrom -w -i BOOT_STUB:bios.cbfs.new
+
